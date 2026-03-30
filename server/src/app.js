@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import productRoutes from "./routes/productRoutes.js";
 
 dotenv.config();
 
@@ -20,5 +21,7 @@ app.get("/api/health", (req, res) => {
     message: "Smart-Stack-IMS API is running"
   });
 });
+
+app.use("/api/products", productRoutes);
 
 export default app;
