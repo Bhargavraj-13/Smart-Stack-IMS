@@ -1,5 +1,10 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f7f7f7;
+  background: #f5f6fa;
+  color: #222;
+}
+
+* {
+  box-sizing: border-box;
 }
