@@ -1,0 +1,21 @@
+.product-list-empty {
+  border: 1px dashed #000;
+  padding: 2rem;
+  text-align: center;
+  color: #555;
+}
+
+.list-title {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #000;
+  padding-bottom: 0.5rem;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
