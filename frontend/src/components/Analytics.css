@@ -1,0 +1,52 @@
+.analytics-container {
+  border: 1px solid #000;
+  padding: 1.5rem;
+}
+
+.analytics-title {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #000;
+  padding-bottom: 0.5rem;
+}
+
+.analytics-loading,
+.analytics-error {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.analytics-grid {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.analytics-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 140px;
+  border: 1px solid #000;
+  padding: 0.75rem 1rem;
+}
+
+.analytics-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #555;
+}
+
+.analytics-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.analytics-none {
+  font-weight: 400;
+  font-size: 0.9rem;
+  color: #555;
+}

@@ -1,0 +1,44 @@
+/* ── Layout ── */
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+}
+
+/* ── Header ── */
+.app-header {
+  border-bottom: 2px solid #000;
+  padding: 1.5rem 0 1rem;
+  margin-bottom: 2rem;
+}
+
+.app-header h1 {
+  font-size: 1.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.app-subtitle {
+  font-size: 0.85rem;
+  color: #444;
+  margin-top: 0.25rem;
+}
+
+/* ── Main grid ── */
+.app-main {
+  display: grid;
+  gap: 2rem;
+}
+
+/* ── Utility ── */
+.error-msg {
+  border: 1px solid #000;
+  padding: 0.75rem 1rem;
+  background: #f5f5f5;
+  font-size: 0.9rem;
+}
+
+.loading-msg {
+  font-size: 0.9rem;
+  color: #444;
+}
