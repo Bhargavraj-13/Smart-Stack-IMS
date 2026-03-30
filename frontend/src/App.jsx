@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import ProductList from './components/ProductList';
-import ProductForm from './components/ProductForm';
-import Analytics from './components/Analytics';
+import ProductList from './components/ProductList.jsx';
+import ProductForm from './components/ProductForm.jsx';
+import Analytics from './components/Analytics.jsx';
 import { fetchProducts } from './api';
 import './App.css';
 

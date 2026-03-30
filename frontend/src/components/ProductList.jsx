@@ -1,5 +1,5 @@
 import React from 'react';
-import ProductCard from './ProductCard';
+import ProductCard from './ProductCard.jsx';
 import './ProductList.css';
 
 function ProductList({ products, onEdit, onDeleted, onSaleRecorded }) {

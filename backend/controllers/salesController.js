@@ -49,7 +49,7 @@ const getAnalytics = async (req, res) => {
           as: 'product',
         },
       },
-      { $unwind: { path: '$product', preserveNullAndEmpty: true } },
+      { $unwind: { path: '$product', preserveNullAndEmptyArrays: true } },
     ]);
 
     res.json({

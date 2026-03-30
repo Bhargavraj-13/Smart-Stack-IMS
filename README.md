@@ -12,7 +12,7 @@ A full-stack **Inventory Management System** with demand prediction and restocki
 
 ## Tech Stack
 
-- **Frontend**: React 18 (CRA), Axios
+- **Frontend**: React 18 (Vite), Axios
 - **Backend**: Node.js + Express 4
 - **Database**: MongoDB + Mongoose
 
@@ -35,12 +35,12 @@ A full-stack **Inventory Management System** with demand prediction and restocki
 └── frontend/
     └── src/
         ├── api.js              # Axios API calls
-        ├── App.js
+        ├── App.jsx
         └── components/
-            ├── ProductList.js
-            ├── ProductCard.js
-            ├── ProductForm.js
-            └── Analytics.js
+            ├── ProductList.jsx
+            ├── ProductCard.jsx
+            ├── ProductForm.jsx
+            └── Analytics.jsx
 ```
 
 ## Setup & Run
@@ -65,7 +65,7 @@ npm run dev
 ```bash
 cd frontend
 npm install
-npm start
+npm run dev
 # App available at http://localhost:3000
 ```
 
