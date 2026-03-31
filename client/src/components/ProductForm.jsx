@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function ProductForm({ onAddProduct }) {
+function ProductForm({ onAddProduct, onUpdateProduct, editingProduct, onCancelEdit }) {
   const [formData, setFormData] = useState({
     name: "",
     category: "",
@@ -9,6 +9,28 @@ function ProductForm({ onAddProduct }) {
     section: "",
     similarItems: ""
   });
+
+  useEffect(() => {
+    if (editingProduct) {
+      setFormData({
+        name: editingProduct.name || "",
+        category: editingProduct.category || "",
+        price: editingProduct.price || "",
+        stock: editingProduct.stock || "",
+        section: editingProduct.section || "",
+        similarItems: editingProduct.similarItems?.join(", ") || ""
+      });
+    } else {
+      setFormData({
+        name: "",
+        category: "",
+        price: "",
+        stock: "",
+        section: "",
+        similarItems: ""
+      });
+    }
+  }, [editingProduct]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -31,7 +53,11 @@ function ProductForm({ onAddProduct }) {
         : []
     };
 
-    onAddProduct(payload);
+    if (editingProduct) {
+      onUpdateProduct(editingProduct._id, payload);
+    } else {
+      onAddProduct(payload);
+    }
 
     setFormData({
       name: "",
@@ -45,7 +71,7 @@ function ProductForm({ onAddProduct }) {
 
   return (
     <form onSubmit={handleSubmit} style={styles.form}>
-      <h2>Add Product</h2>
+      <h2>{editingProduct ? "Edit Product" : "Add Product"}</h2>
 
       <input
         type="text"
@@ -106,9 +132,21 @@ function ProductForm({ onAddProduct }) {
         style={styles.input}
       />
 
-      <button type="submit" style={styles.button}>
-        Add Product
-      </button>
+      <div style={styles.buttonRow}>
+        <button type="submit" style={styles.button}>
+          {editingProduct ? "Update Product" : "Add Product"}
+        </button>
+
+        {editingProduct && (
+          <button
+            type="button"
+            onClick={onCancelEdit}
+            style={styles.cancelButton}
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 }
@@ -129,7 +167,17 @@ const styles = {
     border: "1px solid #ccc",
     borderRadius: "6px"
   },
+  buttonRow: {
+    display: "flex",
+    gap: "10px"
+  },
   button: {
+    padding: "10px 16px",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer"
+  },
+  cancelButton: {
     padding: "10px 16px",
     border: "none",
     borderRadius: "6px",
