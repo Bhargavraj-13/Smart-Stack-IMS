@@ -137,3 +137,40 @@ export const deleteProduct = async (req, res) => {
     });
   }
 };
+
+export const sellProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found"
+      });
+    }
+
+    if (product.stock === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Product is already out of stock"
+      });
+    }
+
+    product.stock -= 1;
+    product.availability = getAvailability(product.stock);
+
+    await product.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Product stock updated after sale",
+      data: product
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to sell product",
+      error: error.message
+    });
+  }
+};

@@ -5,7 +5,8 @@ import {
   getAllProducts,
   createProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  sellProduct
 } from "../services/productService";
 
 function Home() {
@@ -56,6 +57,19 @@ function Home() {
     }
   };
 
+  const handleSellProduct = async (id) => {
+    try {
+      await sellProduct(id);
+      if (editingProduct && editingProduct._id === id) {
+        setEditingProduct(null);
+      }
+      await fetchProducts();
+    } catch (error) {
+      console.error("Failed to sell product:", error);
+      alert("Cannot sell this product. It may already be out of stock.");
+    }
+  };
+
   const handleEditProduct = (product) => {
     setEditingProduct(product);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -88,6 +102,7 @@ function Home() {
           products={products}
           onDeleteProduct={handleDeleteProduct}
           onEditProduct={handleEditProduct}
+          onSellProduct={handleSellProduct}
         />
       )}
     </div>
