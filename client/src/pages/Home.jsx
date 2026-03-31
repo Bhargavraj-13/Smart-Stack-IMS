@@ -9,6 +9,7 @@ import {
   updateProduct,
   deleteProduct,
   sellProduct,
+  restockProduct,
   getMostSoldProductToday
 } from "../services/productService";
 
@@ -76,16 +77,29 @@ function Home() {
     }
   };
 
-  const handleSellProduct = async (id) => {
+  const handleSellProduct = async (id, quantity) => {
     try {
-      await sellProduct(id);
+      await sellProduct(id, quantity);
       if (editingProduct && editingProduct._id === id) {
         setEditingProduct(null);
       }
       await refreshData();
     } catch (error) {
       console.error("Failed to sell product:", error);
-      alert("Cannot sell this product. It may already be out of stock.");
+      alert("Cannot sell this quantity. Check available stock.");
+    }
+  };
+
+  const handleRestockProduct = async (id, quantity) => {
+    try {
+      await restockProduct(id, quantity);
+      if (editingProduct && editingProduct._id === id) {
+        setEditingProduct(null);
+      }
+      await refreshData();
+    } catch (error) {
+      console.error("Failed to restock product:", error);
+      alert("Restock failed. Please try again.");
     }
   };
 
@@ -155,6 +169,7 @@ function Home() {
           onDeleteProduct={handleDeleteProduct}
           onEditProduct={handleEditProduct}
           onSellProduct={handleSellProduct}
+          onRestockProduct={handleRestockProduct}
         />
       )}
     </div>

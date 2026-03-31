@@ -150,21 +150,32 @@ export const sellProduct = async (req, res) => {
       });
     }
 
-    if (product.stock === 0) {
+    const quantity = Number(req.body.quantity);
+
+    if (!Number.isInteger(quantity) || quantity < 1) {
       return res.status(400).json({
         success: false,
-        message: "Product is already out of stock"
+        message: "Quantity must be a positive integer"
       });
     }
 
-    product.stock -= 1;
+    if (quantity > product.stock) {
+      return res.status(400).json({
+        success: false,
+        message: "Not enough stock available"
+      });
+    }
+
+    product.stock -= quantity;
     product.availability = getAvailability(product.stock);
 
     await product.save();
 
     await Sale.create({
       productId: product._id,
-      quantitySold: 1
+      quantitySold: quantity,
+      priceAtSale: product.price,
+      revenue: product.price * quantity
     });
 
     res.status(200).json({
@@ -239,6 +250,45 @@ export const getMostSoldProductToday = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to fetch most sold product",
+      error: error.message
+    });
+  }
+};
+
+export const restockProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found"
+      });
+    }
+
+    const quantity = Number(req.body.quantity);
+
+    if (!Number.isInteger(quantity) || quantity < 1) {
+      return res.status(400).json({
+        success: false,
+        message: "Quantity must be a positive integer"
+      });
+    }
+
+    product.stock += quantity;
+    product.availability = getAvailability(product.stock);
+
+    await product.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Product restocked successfully",
+      data: product
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to restock product",
       error: error.message
     });
   }

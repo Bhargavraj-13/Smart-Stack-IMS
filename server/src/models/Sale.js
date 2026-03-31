@@ -12,6 +12,16 @@ const saleSchema = new mongoose.Schema(
       default: 1,
       min: 1
     },
+    priceAtSale: {
+      type: Number,
+      required: true,
+      min: 0
+    },
+    revenue: {
+      type: Number,
+      required: true,
+      min: 0
+    },
     soldAt: {
       type: Date,
       default: Date.now
