@@ -1,3 +1,5 @@
+import theme from "../theme";
+
 function SearchBar({ searchTerm, onSearchChange }) {
   return (
     <div style={styles.wrapper}>
@@ -18,9 +20,11 @@ const styles = {
   },
   input: {
     width: "100%",
-    padding: "12px",
-    borderRadius: "8px",
-    border: "1px solid #ccc",
+    padding: "14px 16px",
+    borderRadius: "12px",
+    border: `1px solid ${theme.colors.border}`,
+    background: theme.colors.surface,
+    color: theme.colors.textPrimary,
     fontSize: "1rem"
   }
 };

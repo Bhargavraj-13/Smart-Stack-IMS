@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import theme from "../theme";
 
 function ProductForm({
   onAddProduct,
@@ -92,57 +93,64 @@ function ProductForm({
 
   return (
     <form onSubmit={handleSubmit} style={styles.form}>
-      <h2>{editingProduct ? "Edit Product" : "Add Product"}</h2>
+      <div style={styles.headerRow}>
+        <h2 style={styles.title}>
+          {editingProduct ? "Edit Product" : "Add Product"}
+        </h2>
+        {editingProduct && <span style={styles.editBadge}>Editing Mode</span>}
+      </div>
 
-      <input
-        type="text"
-        name="name"
-        placeholder="Product Name"
-        value={formData.name}
-        onChange={handleChange}
-        required
-        style={styles.input}
-      />
+      <div style={styles.grid}>
+        <input
+          type="text"
+          name="name"
+          placeholder="Product Name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+          style={styles.input}
+        />
 
-      <input
-        type="text"
-        name="category"
-        placeholder="Category"
-        value={formData.category}
-        onChange={handleChange}
-        required
-        style={styles.input}
-      />
+        <input
+          type="text"
+          name="category"
+          placeholder="Category"
+          value={formData.category}
+          onChange={handleChange}
+          required
+          style={styles.input}
+        />
 
-      <input
-        type="number"
-        name="price"
-        placeholder="Price"
-        value={formData.price}
-        onChange={handleChange}
-        required
-        style={styles.input}
-      />
+        <input
+          type="number"
+          name="price"
+          placeholder="Price"
+          value={formData.price}
+          onChange={handleChange}
+          required
+          style={styles.input}
+        />
 
-      <input
-        type="number"
-        name="stock"
-        placeholder="Stock"
-        value={formData.stock}
-        onChange={handleChange}
-        required
-        style={styles.input}
-      />
+        <input
+          type="number"
+          name="stock"
+          placeholder="Stock"
+          value={formData.stock}
+          onChange={handleChange}
+          required
+          style={styles.input}
+        />
 
-      <input
-        type="text"
-        name="section"
-        placeholder="Section"
-        value={formData.section}
-        onChange={handleChange}
-        required
-        style={styles.input}
-      />
+        <input
+          type="text"
+          name="section"
+          placeholder="Section"
+          value={formData.section}
+          onChange={handleChange}
+          required
+          style={styles.input}
+        />
+      </div>
 
       <label style={styles.label}>Similar Products</label>
       <select
@@ -163,7 +171,7 @@ function ProductForm({
       </p>
 
       <div style={styles.buttonRow}>
-        <button type="submit" style={styles.button}>
+        <button type="submit" style={styles.primaryButton}>
           {editingProduct ? "Update Product" : "Add Product"}
         </button>
 
@@ -171,7 +179,7 @@ function ProductForm({
           <button
             type="button"
             onClick={onCancelEdit}
-            style={styles.cancelButton}
+            style={styles.secondaryButton}
           >
             Cancel
           </button>
@@ -181,52 +189,86 @@ function ProductForm({
   );
 }
 
+const baseInput = {
+  width: "100%",
+  padding: "12px 14px",
+  border: `1px solid ${theme.colors.border}`,
+  borderRadius: "12px",
+  background: theme.colors.surface,
+  color: theme.colors.textPrimary
+};
+
 const styles = {
   form: {
-    background: "#ffffff",
-    padding: "1rem",
-    borderRadius: "10px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+    background: `linear-gradient(180deg, ${theme.colors.surfaceLight}, ${theme.colors.surface})`,
+    padding: "1.4rem",
+    borderRadius: theme.radius,
+    border: `1px solid ${theme.colors.border}`,
+    boxShadow: theme.shadow,
     marginBottom: "2rem"
   },
-  input: {
-    display: "block",
-    width: "100%",
-    padding: "10px",
-    marginBottom: "12px",
-    border: "1px solid #ccc",
-    borderRadius: "6px"
+  headerRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "1rem",
+    flexWrap: "wrap",
+    gap: "10px"
   },
+  title: {
+    margin: 0,
+    color: theme.colors.textPrimary
+  },
+  editBadge: {
+    background: "rgba(255, 122, 0, 0.16)",
+    color: theme.colors.accent,
+    padding: "6px 10px",
+    borderRadius: "999px",
+    fontSize: "0.9rem",
+    fontWeight: "600"
+  },
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: "12px",
+    marginBottom: "1rem"
+  },
+  input: baseInput,
   label: {
     display: "block",
     marginBottom: "8px",
-    fontWeight: "bold"
+    color: theme.colors.textPrimary,
+    fontWeight: "600"
   },
   select: {
-    width: "100%",
-    minHeight: "120px",
-    padding: "10px",
-    border: "1px solid #ccc",
-    borderRadius: "6px"
+    ...baseInput,
+    minHeight: "130px"
   },
   helperText: {
     fontSize: "0.9rem",
-    color: "#666"
+    color: theme.colors.textSecondary
   },
   buttonRow: {
     display: "flex",
-    gap: "10px"
+    gap: "10px",
+    flexWrap: "wrap"
   },
-  button: {
-    padding: "10px 16px",
+  primaryButton: {
+    background: theme.colors.accent,
+    color: "#ffffff",
     border: "none",
-    borderRadius: "6px",
+    borderRadius: "10px",
+    padding: "12px 18px",
+    fontWeight: "600",
     cursor: "pointer"
   },
-  cancelButton: {
-    padding: "10px 16px",
-    border: "none",
-    borderRadius: "6px",
+  secondaryButton: {
+    background: "transparent",
+    color: theme.colors.textPrimary,
+    border: `1px solid ${theme.colors.border}`,
+    borderRadius: "10px",
+    padding: "12px 18px",
+    fontWeight: "600",
     cursor: "pointer"
   }
 };

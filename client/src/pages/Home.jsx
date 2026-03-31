@@ -180,15 +180,17 @@ function Home() {
 
 const styles = {
   container: {
-    maxWidth: "1000px",
+    maxWidth: "1200px",
     margin: "0 auto",
     padding: "2rem"
   },
   analyticsCard: {
-    background: "#ffffff",
-    padding: "1rem",
-    borderRadius: "10px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+    background: "linear-gradient(180deg, #1f2430, #171a21)",
+    color: "#ffffff",
+    padding: "1.2rem",
+    borderRadius: "14px",
+    border: "1px solid #2b3240",
+    boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
     marginBottom: "2rem"
   }
 };

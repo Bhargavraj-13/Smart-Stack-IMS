@@ -1,3 +1,5 @@
+import theme from "../theme";
+
 function DashboardCards({ products }) {
   const totalProducts = products.length;
   const inStockCount = products.filter((product) => product.stock >= 5).length;
@@ -17,8 +19,8 @@ function DashboardCards({ products }) {
     <div style={styles.grid}>
       {cards.map((card) => (
         <div key={card.title} style={styles.card}>
-          <h3 style={styles.title}>{card.title}</h3>
-          <p style={styles.value}>{card.value}</p>
+          <p style={styles.title}>{card.title}</p>
+          <h2 style={styles.value}>{card.value}</h2>
         </div>
       ))}
     </div>
@@ -33,20 +35,23 @@ const styles = {
     marginBottom: "2rem"
   },
   card: {
-    background: "#ffffff",
-    padding: "1rem",
-    borderRadius: "10px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.08)"
+    background: `linear-gradient(180deg, ${theme.colors.surfaceLight}, ${theme.colors.surface})`,
+    border: `1px solid ${theme.colors.border}`,
+    borderRadius: theme.radius,
+    padding: "1.2rem",
+    boxShadow: theme.shadow
   },
   title: {
     margin: 0,
-    marginBottom: "0.5rem",
-    fontSize: "1rem"
+    marginBottom: "0.6rem",
+    color: theme.colors.textSecondary,
+    fontSize: "0.95rem"
   },
   value: {
     margin: 0,
-    fontSize: "1.5rem",
-    fontWeight: "bold"
+    color: theme.colors.accent,
+    fontSize: "2rem",
+    fontWeight: "700"
   }
 };
 
