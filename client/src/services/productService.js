@@ -26,3 +26,8 @@ export const sellProduct = async (id) => {
   const response = await axios.patch(`${API_URL}/api/products/${id}/sell`);
   return response.data;
 };
+
+export const getMostSoldProductToday = async () => {
+  const response = await axios.get(`${API_URL}/api/products/most-sold-today`);
+  return response.data;
+};
