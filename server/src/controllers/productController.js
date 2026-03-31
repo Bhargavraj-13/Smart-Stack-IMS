@@ -240,12 +240,13 @@ export const getMostSoldProductToday = async (req, res) => {
       {
         $group: {
           _id: "$productId",
-          totalSold: { $sum: "$quantitySold" }
+          totalUnitsSold: { $sum: "$quantitySold" },
+          totalRevenue: { $sum: "$revenue" }
         }
       },
       {
         $sort: {
-          totalSold: -1
+          totalRevenue: -1
         }
       },
       {
@@ -278,13 +279,14 @@ export const getMostSoldProductToday = async (req, res) => {
         productId: topProduct[0].product._id,
         name: topProduct[0].product.name,
         category: topProduct[0].product.category,
-        totalSold: topProduct[0].totalSold
+        totalUnitsSold: topProduct[0].totalUnitsSold,
+        totalRevenue: topProduct[0].totalRevenue
       }
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to fetch most sold product",
+      message: "Failed to fetch top revenue product",
       error: error.message
     });
   }
