@@ -54,9 +54,9 @@ function ProductList({
                 <p><strong>Section:</strong> {product.section}</p>
                 <p><strong>Availability:</strong> {product.availability}</p>
                 <p>
-                  <strong>Similar Items:</strong>{" "}
-                  {product.similarItems?.length
-                    ? product.similarItems.join(", ")
+                <strong>Similar Products:</strong>{" "}
+                {product.similarProducts?.length
+                    ? product.similarProducts.map((item) => item.name).join(", ")
                     : "None"}
                 </p>
 

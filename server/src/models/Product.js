@@ -33,10 +33,12 @@ const productSchema = new mongoose.Schema(
       enum: ["In Stock", "Low Stock", "Out of Stock"],
       default: "In Stock"
     },
-    similarItems: {
-      type: [String],
-      default: []
-    }
+    similarProducts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product"
+      }
+    ]
   },
   {
     timestamps: true

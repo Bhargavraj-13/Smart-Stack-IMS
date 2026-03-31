@@ -154,6 +154,7 @@ function Home() {
         onUpdateProduct={handleUpdateProduct}
         editingProduct={editingProduct}
         onCancelEdit={handleCancelEdit}
+        allProducts={products}
       />
 
       <SearchBar

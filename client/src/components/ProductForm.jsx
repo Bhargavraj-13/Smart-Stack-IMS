@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
 
-function ProductForm({ onAddProduct, onUpdateProduct, editingProduct, onCancelEdit }) {
+function ProductForm({
+  onAddProduct,
+  onUpdateProduct,
+  editingProduct,
+  onCancelEdit,
+  allProducts
+}) {
   const [formData, setFormData] = useState({
     name: "",
     category: "",
     price: "",
     stock: "",
     section: "",
-    similarItems: ""
+    similarProducts: []
   });
 
   useEffect(() => {
@@ -18,7 +24,8 @@ function ProductForm({ onAddProduct, onUpdateProduct, editingProduct, onCancelEd
         price: editingProduct.price || "",
         stock: editingProduct.stock || "",
         section: editingProduct.section || "",
-        similarItems: editingProduct.similarItems?.join(", ") || ""
+        similarProducts:
+          editingProduct.similarProducts?.map((product) => product._id) || []
       });
     } else {
       setFormData({
@@ -27,7 +34,7 @@ function ProductForm({ onAddProduct, onUpdateProduct, editingProduct, onCancelEd
         price: "",
         stock: "",
         section: "",
-        similarItems: ""
+        similarProducts: []
       });
     }
   }, [editingProduct]);
@@ -36,6 +43,18 @@ function ProductForm({ onAddProduct, onUpdateProduct, editingProduct, onCancelEd
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleSimilarProductsChange = (e) => {
+    const selectedValues = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value
+    );
+
+    setFormData((prev) => ({
+      ...prev,
+      similarProducts: selectedValues
     }));
   };
 
@@ -48,9 +67,7 @@ function ProductForm({ onAddProduct, onUpdateProduct, editingProduct, onCancelEd
       price: Number(formData.price),
       stock: Number(formData.stock),
       section: formData.section,
-      similarItems: formData.similarItems
-        ? formData.similarItems.split(",").map((item) => item.trim())
-        : []
+      similarProducts: formData.similarProducts
     };
 
     if (editingProduct) {
@@ -65,9 +82,13 @@ function ProductForm({ onAddProduct, onUpdateProduct, editingProduct, onCancelEd
       price: "",
       stock: "",
       section: "",
-      similarItems: ""
+      similarProducts: []
     });
   };
+
+  const selectableProducts = allProducts.filter(
+    (product) => product._id !== editingProduct?._id
+  );
 
   return (
     <form onSubmit={handleSubmit} style={styles.form}>
@@ -123,14 +144,23 @@ function ProductForm({ onAddProduct, onUpdateProduct, editingProduct, onCancelEd
         style={styles.input}
       />
 
-      <input
-        type="text"
-        name="similarItems"
-        placeholder="Similar Items (comma separated)"
-        value={formData.similarItems}
-        onChange={handleChange}
-        style={styles.input}
-      />
+      <label style={styles.label}>Similar Products</label>
+      <select
+        multiple
+        value={formData.similarProducts}
+        onChange={handleSimilarProductsChange}
+        style={styles.select}
+      >
+        {selectableProducts.map((product) => (
+          <option key={product._id} value={product._id}>
+            {product.name} ({product.category})
+          </option>
+        ))}
+      </select>
+
+      <p style={styles.helperText}>
+        Hold Ctrl (or Cmd on Mac) to select multiple products.
+      </p>
 
       <div style={styles.buttonRow}>
         <button type="submit" style={styles.button}>
@@ -166,6 +196,22 @@ const styles = {
     marginBottom: "12px",
     border: "1px solid #ccc",
     borderRadius: "6px"
+  },
+  label: {
+    display: "block",
+    marginBottom: "8px",
+    fontWeight: "bold"
+  },
+  select: {
+    width: "100%",
+    minHeight: "120px",
+    padding: "10px",
+    border: "1px solid #ccc",
+    borderRadius: "6px"
+  },
+  helperText: {
+    fontSize: "0.9rem",
+    color: "#666"
   },
   buttonRow: {
     display: "flex",
