@@ -6,6 +6,7 @@ import {
   updateProduct,
   deleteProduct,
   sellProduct,
+  restockProduct,
   getMostSoldProductToday
 } from "../controllers/productController.js";
 
@@ -18,5 +19,6 @@ router.get("/:id", getProductById);
 router.put("/:id", updateProduct);
 router.delete("/:id", deleteProduct);
 router.patch("/:id/sell", sellProduct);
+router.patch("/:id/restock", restockProduct);
 
 export default router;

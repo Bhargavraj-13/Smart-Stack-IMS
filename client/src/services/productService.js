@@ -22,8 +22,17 @@ export const deleteProduct = async (id) => {
   return response.data;
 };
 
-export const sellProduct = async (id) => {
-  const response = await axios.patch(`${API_URL}/api/products/${id}/sell`);
+export const sellProduct = async (id, quantity) => {
+  const response = await axios.patch(`${API_URL}/api/products/${id}/sell`, {
+    quantity
+  });
+  return response.data;
+};
+
+export const restockProduct = async (id, quantity) => {
+  const response = await axios.patch(`${API_URL}/api/products/${id}/restock`, {
+    quantity
+  });
   return response.data;
 };
 
