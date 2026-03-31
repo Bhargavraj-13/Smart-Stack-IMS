@@ -137,15 +137,16 @@ function Home() {
       <DashboardCards products={products} />
 
       <div style={styles.analyticsCard}>
-        <h2>Most Sold Product (Last 24 Hours)</h2>
+        <h2>Top Revenue Product (Last 24 Hours)</h2>
         {topSoldProduct ? (
-          <>
-            <p><strong>Name:</strong> {topSoldProduct.name}</p>
-            <p><strong>Category:</strong> {topSoldProduct.category}</p>
-            <p><strong>Units Sold:</strong> {topSoldProduct.totalSold}</p>
-          </>
+            <>
+                <p><strong>Name:</strong> {topSoldProduct.name}</p>
+                <p><strong>Category:</strong> {topSoldProduct.category}</p>
+                <p><strong>Units Sold:</strong> {topSoldProduct.totalUnitsSold}</p>
+                <p><strong>Revenue:</strong> ₹{topSoldProduct.totalRevenue}</p>
+            </>
         ) : (
-          <p>No sales recorded in the last 24 hours.</p>
+            <p>No sales recorded in the last 24 hours.</p>
         )}
       </div>
 
