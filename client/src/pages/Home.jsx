@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ProductForm from "../components/ProductForm";
 import ProductList from "../components/ProductList";
+import SearchBar from "../components/SearchBar";
+import DashboardCards from "../components/DashboardCards";
 import {
   getAllProducts,
   createProduct,
@@ -15,6 +17,7 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [editingProduct, setEditingProduct] = useState(null);
   const [topSoldProduct, setTopSoldProduct] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchProducts = async () => {
     try {
@@ -95,6 +98,19 @@ function Home() {
     setEditingProduct(null);
   };
 
+  const filteredProducts = useMemo(() => {
+    const term = searchTerm.toLowerCase().trim();
+
+    if (!term) return products;
+
+    return products.filter((product) => {
+      return (
+        product.name.toLowerCase().includes(term) ||
+        product.category.toLowerCase().includes(term)
+      );
+    });
+  }, [products, searchTerm]);
+
   useEffect(() => {
     refreshData();
   }, []);
@@ -103,6 +119,8 @@ function Home() {
     <div style={styles.container}>
       <h1>Smart-Stack-IMS</h1>
       <p>Retail Inventory Admin Panel</p>
+
+      <DashboardCards products={products} />
 
       <div style={styles.analyticsCard}>
         <h2>Most Sold Product (Last 24 Hours)</h2>
@@ -124,11 +142,16 @@ function Home() {
         onCancelEdit={handleCancelEdit}
       />
 
+      <SearchBar
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+      />
+
       {loading ? (
         <p>Loading products...</p>
       ) : (
         <ProductList
-          products={products}
+          products={filteredProducts}
           onDeleteProduct={handleDeleteProduct}
           onEditProduct={handleEditProduct}
           onSellProduct={handleSellProduct}

@@ -1,7 +1,7 @@
 function ProductList({ products, onDeleteProduct, onEditProduct, onSellProduct }) {
   return (
     <div style={styles.wrapper}>
-      <h2>All Products</h2>
+      <h2>Products</h2>
 
       {products.length === 0 ? (
         <p>No products found.</p>
