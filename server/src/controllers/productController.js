@@ -1,10 +1,18 @@
 import Product from "../models/Product.js";
 import Sale from "../models/Sale.js";
 import getAvailability from "../utils/getAvailability.js";
+import syncSimilarProducts from "../utils/syncSimilarProducts.js";
 
 export const createProduct = async (req, res) => {
   try {
-    const { name, category, price, stock, section, similarItems } = req.body;
+    const {
+      name,
+      category,
+      price,
+      stock,
+      section,
+      similarProducts = []
+    } = req.body;
 
     const availability = getAvailability(Number(stock));
 
@@ -15,13 +23,20 @@ export const createProduct = async (req, res) => {
       stock,
       section,
       availability,
-      similarItems: similarItems || []
+      similarProducts: []
     });
+
+    await syncSimilarProducts(product._id, similarProducts);
+
+    const populatedProduct = await Product.findById(product._id).populate(
+      "similarProducts",
+      "name category price stock section availability"
+    );
 
     res.status(201).json({
       success: true,
       message: "Product created successfully",
-      data: product
+      data: populatedProduct
     });
   } catch (error) {
     res.status(500).json({
@@ -34,7 +49,9 @@ export const createProduct = async (req, res) => {
 
 export const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
+    const products = await Product.find()
+      .populate("similarProducts", "name category price stock section availability")
+      .sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
@@ -52,7 +69,10 @@ export const getAllProducts = async (req, res) => {
 
 export const getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate(
+      "similarProducts",
+      "name category price stock section availability"
+    );
 
     if (!product) {
       return res.status(404).json({
@@ -90,21 +110,29 @@ export const updateProduct = async (req, res) => {
       category: req.body.category ?? existingProduct.category,
       price: req.body.price ?? existingProduct.price,
       stock: req.body.stock ?? existingProduct.stock,
-      section: req.body.section ?? existingProduct.section,
-      similarItems: req.body.similarItems ?? existingProduct.similarItems
+      section: req.body.section ?? existingProduct.section
     };
 
     updatedData.availability = getAvailability(Number(updatedData.stock));
 
-    const product = await Product.findByIdAndUpdate(req.params.id, updatedData, {
+    await Product.findByIdAndUpdate(req.params.id, updatedData, {
       new: true,
       runValidators: true
     });
 
+    if (req.body.similarProducts) {
+      await syncSimilarProducts(req.params.id, req.body.similarProducts);
+    }
+
+    const updatedProduct = await Product.findById(req.params.id).populate(
+      "similarProducts",
+      "name category price stock section availability"
+    );
+
     res.status(200).json({
       success: true,
       message: "Product updated successfully",
-      data: product
+      data: updatedProduct
     });
   } catch (error) {
     res.status(500).json({
@@ -117,7 +145,7 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id);
+    const product = await Product.findById(req.params.id);
 
     if (!product) {
       return res.status(404).json({
@@ -125,6 +153,13 @@ export const deleteProduct = async (req, res) => {
         message: "Product not found"
       });
     }
+
+    await Product.updateMany(
+      { similarProducts: req.params.id },
+      { $pull: { similarProducts: req.params.id } }
+    );
+
+    await Product.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
       success: true,
