@@ -1,4 +1,4 @@
-function ProductList({ products, onDeleteProduct }) {
+function ProductList({ products, onDeleteProduct, onEditProduct }) {
   return (
     <div style={styles.wrapper}>
       <h2>All Products</h2>
@@ -22,12 +22,21 @@ function ProductList({ products, onDeleteProduct }) {
                   : "None"}
               </p>
 
-              <button
-                onClick={() => onDeleteProduct(product._id)}
-                style={styles.deleteButton}
-              >
-                Delete
-              </button>
+              <div style={styles.buttonRow}>
+                <button
+                  onClick={() => onEditProduct(product)}
+                  style={styles.editButton}
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => onDeleteProduct(product._id)}
+                  style={styles.deleteButton}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -51,8 +60,18 @@ const styles = {
     borderRadius: "10px",
     boxShadow: "0 2px 8px rgba(0,0,0,0.08)"
   },
+  buttonRow: {
+    display: "flex",
+    gap: "10px",
+    marginTop: "10px"
+  },
+  editButton: {
+    padding: "8px 12px",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer"
+  },
   deleteButton: {
-    marginTop: "10px",
     padding: "8px 12px",
     border: "none",
     borderRadius: "6px",
