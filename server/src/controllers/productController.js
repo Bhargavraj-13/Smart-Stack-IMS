@@ -1,4 +1,5 @@
 import Product from "../models/Product.js";
+import Sale from "../models/Sale.js";
 import getAvailability from "../utils/getAvailability.js";
 
 export const createProduct = async (req, res) => {
@@ -161,6 +162,11 @@ export const sellProduct = async (req, res) => {
 
     await product.save();
 
+    await Sale.create({
+      productId: product._id,
+      quantitySold: 1
+    });
+
     res.status(200).json({
       success: true,
       message: "Product stock updated after sale",
@@ -170,6 +176,69 @@ export const sellProduct = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to sell product",
+      error: error.message
+    });
+  }
+};
+
+export const getMostSoldProductToday = async (req, res) => {
+  try {
+    const since = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+    const topProduct = await Sale.aggregate([
+      {
+        $match: {
+          soldAt: { $gte: since }
+        }
+      },
+      {
+        $group: {
+          _id: "$productId",
+          totalSold: { $sum: "$quantitySold" }
+        }
+      },
+      {
+        $sort: {
+          totalSold: -1
+        }
+      },
+      {
+        $limit: 1
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "_id",
+          as: "product"
+        }
+      },
+      {
+        $unwind: "$product"
+      }
+    ]);
+
+    if (topProduct.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No sales found in the last 24 hours",
+        data: null
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: {
+        productId: topProduct[0].product._id,
+        name: topProduct[0].product.name,
+        category: topProduct[0].product.category,
+        totalSold: topProduct[0].totalSold
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch most sold product",
       error: error.message
     });
   }

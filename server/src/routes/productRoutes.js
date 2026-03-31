@@ -5,11 +5,13 @@ import {
   getProductById,
   updateProduct,
   deleteProduct,
-  sellProduct
+  sellProduct,
+  getMostSoldProductToday
 } from "../controllers/productController.js";
 
 const router = express.Router();
 
+router.get("/most-sold-today", getMostSoldProductToday);
 router.post("/", createProduct);
 router.get("/", getAllProducts);
 router.get("/:id", getProductById);
